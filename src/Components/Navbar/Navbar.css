@@ -1,0 +1,16 @@
+.navbar-nav {
+  min-height: 50px;
+  height: auto;
+  background-color: rgb(245, 74, 74);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.li-navbar {
+  margin: 0 10px;
+  text-decoration: none;
+  font-weight: bolder;
+  color: white;
+}
