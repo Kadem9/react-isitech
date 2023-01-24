@@ -2,12 +2,12 @@ import React, { useContext } from "react";
 import "./Register.css";
 import { UserContext } from "../../context/userContext";
 
-export default function Register() {
+export default function Login() {
   const { modalState, toggleModals } = useContext(UserContext);
 
   return (
     <>
-      {modalState.registerModal && (
+      {modalState.loginModal && (
         <div onClick={() => toggleModals("close")} className="overlay">
           <div className="modal">
             <div className="modal-content">
@@ -39,18 +39,7 @@ export default function Register() {
                       required
                     />
                   </div>
-                  <div className="my-form">
-                    <label className="label-register" htmlFor="repeatPassword">
-                      Répeter le mot de passe
-                    </label>
-                    <input
-                      type="password"
-                      id="repeatPassword"
-                      name="repeatPassword"
-                      placeholder="Merci de répeter votre mot de passe"
-                      required
-                    />
-                  </div>
+
                   <button className="btn-submit-register" type="submit">
                     Valider
                   </button>

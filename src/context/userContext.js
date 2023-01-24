@@ -2,7 +2,7 @@ import { useState, createContext, useEffect } from "react";
 
 export const UserContext = createContext();
 
-export function UserContextProviders(props) {
+export function UserContextProvider(props) {
   const [modalState, setModalState] = useState({
     registerModal: false,
     loginModal: false,
@@ -14,24 +14,25 @@ export function UserContextProviders(props) {
         registerModal: true,
         loginModal: false,
       });
-      if (modal === "login") {
-        setModalState({
-          registerModal: false,
-          loginModal: true,
-        });
-      }
-      if (modal === "close") {
-        setModalState({
-          registerModal: false,
-          loginModal: false,
-        });
-      }
     }
-
-    return (
-      <UserContext.Provider value={{ modalState, toggleModals }}>
-        {props.children}
-      </UserContext.Provider>
-    );
+    if (modal === "login") {
+      setModalState({
+        registerModal: false,
+        loginModal: true,
+      });
+    }
+    if (modal === "close") {
+      console.log("test");
+      setModalState({
+        registerModal: false,
+        loginModal: false,
+      });
+    }
   };
+
+  return (
+    <UserContext.Provider value={{ modalState, toggleModals }}>
+      {props.children}
+    </UserContext.Provider>
+  );
 }
