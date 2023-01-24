@@ -1,25 +1,50 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useState } from "react";
 import "./Register.css";
 import { UserContext } from "../../context/userContext";
 
 export default function Register() {
   const { modalState, toggleModals } = useContext(UserContext);
+  const inputs = useRef([]);
+  const [validation, setValidation] = useState("");
+
+  const addInputs = (el) => {
+    if (el && !inputs.current.includes(el)) {
+      inputs.current.push(el);
+    }
+  };
+
+  const handleForm = (e) => {
+    e.preventDefault();
+    if (
+      (inputs.current[1].value.length || inputs.current[2].value.length) < 6
+    ) {
+      setValidation("6 Caractères minimum requis");
+      return;
+    } else if (
+      inputs.current[1].value.length !== inputs.current[2].value.length
+    ) {
+      setValidation("Les mots de passe ne correspondent pas !");
+      return;
+    }
+  };
 
   return (
     <>
       {modalState.registerModal && (
-        <div onClick={() => toggleModals("close")} className="overlay">
+        <div>
+          <div onClick={() => toggleModals("close")} className="overlay"></div>
           <div className="modal">
             <div className="modal-content">
               <div className="modal-header">
                 <h2>Inscrivez-vous !</h2>
                 <hr />
-                <form>
+                <form onSubmit={handleForm}>
                   <div className="my-form">
                     <label className="label-register" htmlFor="email">
                       Votre adresse mail
                     </label>
                     <input
+                      ref={addInputs}
                       type="email"
                       id="email"
                       name="email"
@@ -32,6 +57,7 @@ export default function Register() {
                       Mot de passe
                     </label>
                     <input
+                      ref={addInputs}
                       type="password"
                       id="password"
                       name="password"
@@ -44,6 +70,7 @@ export default function Register() {
                       Répeter le mot de passe
                     </label>
                     <input
+                      ref={addInputs}
                       type="password"
                       id="repeatPassword"
                       name="repeatPassword"
@@ -51,6 +78,7 @@ export default function Register() {
                       required
                     />
                   </div>
+                  <p>{validation}</p>
                   <button className="btn-submit-register" type="submit">
                     Valider
                   </button>

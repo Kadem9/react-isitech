@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useState } from "react";
 import "./Register.css";
 import { UserContext } from "../../context/userContext";
 
@@ -8,7 +8,8 @@ export default function Login() {
   return (
     <>
       {modalState.loginModal && (
-        <div onClick={() => toggleModals("close")} className="overlay">
+        <div>
+          <div onClick={() => toggleModals("close")} className="overlay"></div>
           <div className="modal">
             <div className="modal-content">
               <div className="modal-header">
