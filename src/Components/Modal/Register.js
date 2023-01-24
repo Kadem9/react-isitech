@@ -3,7 +3,8 @@ import "./Register.css";
 import { UserContext } from "../../context/userContext";
 
 export default function Register() {
-  const { modalState, toggleModals } = useContext(UserContext);
+  const { modalState, toggleModals, signUp } = useContext(UserContext);
+  console.log(signUp);
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
 

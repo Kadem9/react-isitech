@@ -1,8 +1,21 @@
 import { useState, createContext, useEffect } from "react";
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { auth } from "../firebase-config";
 
 export const UserContext = createContext();
 
 export function UserContextProvider(props) {
+  const [currentUser, setCurrentUser] = useState();
+  const [loadingData, setloadingData] = useState(true);
+
+  const signUp = (email, password) =>
+    createUserWithEmailAndPassword(auth, email, password);
+
+  // Gestion de mes modales de connexion et d'inscription
   const [modalState, setModalState] = useState({
     registerModal: false,
     loginModal: false,
@@ -31,7 +44,7 @@ export function UserContextProvider(props) {
   };
 
   return (
-    <UserContext.Provider value={{ modalState, toggleModals }}>
+    <UserContext.Provider value={{ modalState, toggleModals, signUp }}>
       {props.children}
     </UserContext.Provider>
   );
