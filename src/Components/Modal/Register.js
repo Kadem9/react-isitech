@@ -4,17 +4,17 @@ import { UserContext } from "../../context/userContext";
 
 export default function Register() {
   const { modalState, toggleModals, signUp } = useContext(UserContext);
-  console.log(signUp);
+
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
-
+  const formRef = useRef([]);
   const addInputs = (el) => {
     if (el && !inputs.current.includes(el)) {
       inputs.current.push(el);
     }
   };
 
-  const handleForm = (e) => {
+  const handleForm = async (e) => {
     e.preventDefault();
     if (
       (inputs.current[1].value.length || inputs.current[2].value.length) < 6
@@ -27,6 +27,16 @@ export default function Register() {
       setValidation("Les mots de passe ne correspondent pas !");
       return;
     }
+
+    try {
+      const cred = await signUp(
+        inputs.current[0].value,
+        inputs.current[1].value
+      );
+      formRef.current.reset();
+      setValidation("");
+      console.log(cred);
+    } catch (error) {}
   };
 
   return (
@@ -39,7 +49,7 @@ export default function Register() {
               <div className="modal-header">
                 <h2>Inscrivez-vous !</h2>
                 <hr />
-                <form onSubmit={handleForm}>
+                <form ref={formRef} onSubmit={handleForm}>
                   <div className="my-form">
                     <label className="label-register" htmlFor="email">
                       Votre adresse mail
