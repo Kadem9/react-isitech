@@ -1,8 +1,10 @@
 import React, { useContext, useRef, useState } from "react";
 import "./Register.css";
 import { UserContext } from "../../context/userContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+  const navigate = useNavigate();
   const { modalState, toggleModals, signUp } = useContext(UserContext);
 
   const inputs = useRef([]);
@@ -35,15 +37,25 @@ export default function Register() {
       );
       formRef.current.reset();
       setValidation("");
-      console.log(cred);
-    } catch (error) {}
+      toggleModals("close");
+      navigate("compte/mon-compte");
+    } catch (error) {
+      // Détails des erreurs FireBase -> https://firebase.google.com/docs/auth/admin/errors?hl=fr
+      if (error.code === "auth/email-already-in-use") {
+        setValidation("L'email que vous renseignez est déjà utilisée");
+      }
+    }
   };
 
+  const closeModal = () => {
+    setValidation("");
+    toggleModals("close");
+  };
   return (
     <>
       {modalState.registerModal && (
         <div>
-          <div onClick={() => toggleModals("close")} className="overlay"></div>
+          <div onClick={() => closeModal()} className="overlay"></div>
           <div className="modal">
             <div className="modal-content">
               <div className="modal-header">
@@ -96,7 +108,7 @@ export default function Register() {
                 </form>
               </div>
               <button
-                onClick={() => toggleModals("close")}
+                onClick={() => closeModal()}
                 className="close-modal-register"
               >
                 X

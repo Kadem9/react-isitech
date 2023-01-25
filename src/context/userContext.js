@@ -9,11 +9,20 @@ import { auth } from "../firebase-config";
 export const UserContext = createContext();
 
 export function UserContextProvider(props) {
+  const signUp = (email, password) =>
+    createUserWithEmailAndPassword(auth, email, password);
+
   const [currentUser, setCurrentUser] = useState();
   const [loadingData, setloadingData] = useState(true);
 
-  const signUp = (email, password) =>
-    createUserWithEmailAndPassword(auth, email, password);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setCurrentUser(currentUser);
+      setloadingData(false);
+    });
+
+    return unsubscribe;
+  }, []);
 
   // Gestion de mes modales de connexion et d'inscription
   const [modalState, setModalState] = useState({
@@ -35,7 +44,6 @@ export function UserContextProvider(props) {
       });
     }
     if (modal === "close") {
-      console.log("test");
       setModalState({
         registerModal: false,
         loginModal: false,
@@ -44,8 +52,10 @@ export function UserContextProvider(props) {
   };
 
   return (
-    <UserContext.Provider value={{ modalState, toggleModals, signUp }}>
-      {props.children}
+    <UserContext.Provider
+      value={{ modalState, toggleModals, signUp, currentUser }}
+    >
+      {!loadingData && props.children}
     </UserContext.Provider>
   );
 }
